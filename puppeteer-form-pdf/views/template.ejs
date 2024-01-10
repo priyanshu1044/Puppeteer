@@ -1,0 +1,20 @@
+<!-- views/template.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Submission</title>
+</head>
+<body>
+  <h1>Form Submission</h1>
+  <p>Name: <%= formData.name %></p>
+  <p>Password: <%= formData.password %></p>
+  <p>Email: <%= formData.email %></p>
+  <p>Phone Number: <%= formData.phone %></p>
+
+  <!-- Add a download button -->
+  <a href="/download" download="output.pdf"><button>Download PDF</button></a>
+</body>
+</html>
