@@ -1,7 +1,3 @@
-
-
-
-
 const puppeteer = require('puppeteer');
 
 function lerp(start, end, t) {
@@ -47,9 +43,9 @@ async function scrapeProduct() {
 
     try {
         // Navigate to the website
-        await page.goto(`https://shareus.io/oXpETY`, { waitUntil: 'load', timeout: 60000 });
+        await page.goto(`https://shareus.io/oXpETY`, { waitUntil: 'networkidle0', timeout: 60000 });
         console.log('Page loaded successfully');
-        // await page.waitForTimeout(10000);
+        // await page.waitForTimeout(10000); 
         // Extract product handles
         const productHandles = await page.$$(".trc_rbox_outer");
 
@@ -75,32 +71,24 @@ async function scrapeProduct() {
 
         // Ensure that uniqueLinks is not empty
         if (uniqueLinks.length > 0) {
-            // const currentLink = uniqueLinks[Math.floor(Math.random() * uniqueLinks.length)];
-            const currentLink = uniqueLinks[0];
+            const currentLink = uniqueLinks[Math.floor(Math.random() * uniqueLinks.length)];
+            // const currentLink = uniqueLinks[0];
             if (currentLink && currentLink.href) {
                 await clickLink(page, '.item-thumbnail-href');
-
                 // Wait for the new tab to open
                 const [newTab] = await Promise.all([
                     browser.waitForTarget(target => target.opener() === page.target()).then(target => target.page()),
-                    page.waitForTimeout(5000), // Adjust the wait time as needed
+                    // page.waitForTimeout(5000), // Adjust the wait time as needed
                 ]);
-
-                // Navigate to the link in the new tab
                 await newTab.goto(currentLink.href, { waitUntil: 'networkidle2', timeout: 10000 });
-
-                // Scroll in the new tab for 10 seconds
-                await fastUpDownScroll(newTab, 10);
-
-                // Close the new tab
+                await fastUpDownScroll(newTab, 2);
                 await newTab.close();
 
 
+                // // with using goto for link
+
 
                 // const newTab = await browser.newPage();
-
-
-
                 // await newTab.goto(currentLink.href, { waitUntil: 'networkidle2', timeout: 10000 });
                 // await newTab.waitForTimeout(500);
                 // await fastUpDownScroll(newTab, 10);
@@ -110,11 +98,6 @@ async function scrapeProduct() {
             } else {
                 console.log('currentLink.href is undefined or empty');
             }
-        
-            
-
-// ...
-
         } else {
             console.log('uniqueLinks is empty');
         }
@@ -138,11 +121,9 @@ async function scrapeProduct() {
         console.error('An error occurred:', error.message);
     } finally {
         // // Close the browser
-        await browser.close();
-        console.log('Browser closed');
+        // await browser.close();
+        // console.log('Browser closed');
     }
 }
 
 scrapeProduct();
-
-
